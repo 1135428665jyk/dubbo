@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+<!--&lt;!&ndash;    指定当前服务/应用的名称（不要和其他服务同名）&ndash;&gt;-->
+<!--    <dubbo:application name="order-service-provider">-->
+<!--&lt;!&ndash;        <dubbo:parameter key="qos.enable" value="true"></dubbo:parameter>&ndash;&gt;-->
+<!--&lt;!&ndash;        <dubbo:parameter key="qos.accept.foreign.ip" value="false" />&ndash;&gt;-->
+<!--&lt;!&ndash;        <dubbo:parameter key="qos.port" value="22222" />&ndash;&gt;-->
+<!--    </dubbo:application>-->
+
+<!--    指定注册中心的位置，本地-->
+<!--    <dubbo:registry address="zookeeper://127.0.0.1:2181"/> 其中的参数check=true表示注册中心不存在时是否报错-->
+<!--    或者-->
+<!--    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" check="true"/>-->
+
+<!--&lt;!&ndash;    通信规则（通信协议，通信端口）&ndash;&gt;-->
+<!--    <dubbo:protocol name="dubbo" port="20880"></dubbo:protocol>-->
+
+<!--    <dubbo:provider timeout="1000"></dubbo:provider>-->
+
+<!--&lt;!&ndash;    暴露服务 ref:指向服务的真正的实现对象&ndash;&gt;-->
+<!--    <dubbo:service delay="-1" interface="com.jyk.service.UserService" timeout="1000" ref="userServiceimpl" version="1.0.0">-->
+<!--        <dubbo:method name="getUserAddressList" timeout="1000"></dubbo:method>-->
+<!--    </dubbo:service>-->
+
+<!--&lt;!&ndash;    服务的真正的实现&ndash;&gt;-->
+<!--    <bean id="userServiceimpl" class="com.jyk.service.UserServiceImpl"></bean>-->
+
+    <!-- 1、指定当前服务/应用的名字（同样的服务名字相同，不要和别的服务同名） -->
+    <dubbo:application name="order-service-provider"></dubbo:application>
+
+    <!-- 2、指定注册中心的位置 -->
+     <dubbo:registry address="zookeeper://127.0.0.1:2181"></dubbo:registry>
+<!--    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"></dubbo:registry>-->
+
+    <!-- 3、指定通信规则（通信协议？通信端口） -->
+    <dubbo:protocol name="dubbo" port="20888" host="localhost"></dubbo:protocol>
+
+
+    <!-- 注册服务1 -->
+    <bean id="userService" class="com.jyk.service.UserServiceImpl"></bean>
+    <!-- 4、暴露服务   ref：指向服务的真正的实现对象 -->
+    <dubbo:service interface="com.jyk.service.UserService"
+                   ref="userService">
+    </dubbo:service>
+<!--    注册的服务2 -->
+    <bean id="helloService" class="com.jyk.service.HelloService"></bean>
+    <dubbo:service id="sayHello" interface="com.jyk.service.SayHello"
+                   ref="helloService">
+    </dubbo:service>
+
+    <!--统一设置服务提供方的规则  -->
+    <dubbo:provider timeout="1000" ></dubbo:provider>
+
+
+
+
+
+
+
+</beans>
